@@ -1,38 +1,121 @@
-.App {
+.main {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 5% 33% 5% 33%;
+}
+
+.main-head {
+  background: #F5F5F5;
+  border-radius: 1%;
   text-align: center;
+  padding: 2rem;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.login {
+  font-weight: 600;
+  font-size: 28.9067px;
+  color: #616161;
+  margin-top: 2rem;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.rememebr {
+  display: flex;
+  /* flex: 1; */
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 9%;
+  padding-right: 10%;
+  margin-top: 2rem;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.sub-head {
+  color: #ADAEB2;
+  margin-top: 2.5%;
+  font-weight: 400;
+  font-size: 15.8987px;
+  display: flex;
+  justify-content: center;
+}
+
+.text-field {
   display: flex;
   flex-direction: column;
+  padding-left: 10%;
+  padding-right: 10%;
+  justify-content: space-between;
+  height: 8rem;
+}
+
+.login-button {
+  width: 100%;
+  height: 3.5rem;
+  margin-top: 2rem;
+  cursor: pointer;
+}
+
+.blue-footer {
+  height: 2rem;
+  background-color: #5A9AFF;
+  /* border-radius: 0.4rem;
+  margin-top: 0rem; */
+}
+.logo {
+  width: 5rem;
+  margin-top: 1.5rem;
+  text-align: center;
+}
+.home {
+  /* height: 3rem; */
+  border-radius: 6px;
+  border: 0rem;
+  margin: 2rem;
+  text-align: left;
+  padding: 0.8rem;
+  display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  cursor: pointer;
+}
+.bottom-div {
+  background: #FFFFFF;
+  box-shadow: 0px 0px 15px rgb(0 0 0 / 10%);
+  border-radius: 8px;
+  /* position: absolute;
+  bottom: 0; */
+  /* margin-top: auto; */
+  margin: auto 2rem 2rem 2rem;
+  padding: 1.8rem;
 }
 
-.App-link {
-  color: #61dafb;
+.user-details {
+  margin-bottom: 1rem;
+  text-align: left;
+  display: flex;
+  align-items: center;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.user-name {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  /* line-height: 19px; */
+  color: #959595;
+}
+
+.user-email {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 10px;
+  /* line-height: 14px; */
+  /* identical to box height */
+
+
+  color: #959595;
+}
+
+.logout {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  color: #D9534F;
+  margin-left: 0.3rem;
+  cursor: pointer;
 }
