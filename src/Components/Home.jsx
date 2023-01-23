@@ -14,28 +14,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useState } from 'react';
 
 function Home(props) {
-    const []
-    const [value, setValue] = React.useState(options[0]);
-    const breadcrumbs = [
-        <Link underline="hover" key="1" color="inherit" href="/" onClick={handleClick}>
-          MUI
-        </Link>,
-        <Link
-          underline="hover"
-          key="2"
-          color="inherit"
-          href="/material-ui/getting-started/installation/"
-          onClick={handleClick}
-        >
-          Core
-        </Link>,
-        <Typography key="3" color="text.primary">
-          Breadcrumb
-        </Typography>,
-      ];
-    // const warehouseNames = [
-    //     { label: 'Avinashi Traders', year: 1994 },
-    //     { label: 'Abhishek Gupta', year: 1972 },];
+
     const dummyArr = [
         // {
         //     SNo: 'S.no',
@@ -78,10 +57,22 @@ function Home(props) {
             Action: 'See details'
         }
     ]
-    console.log('search==', searchText);
+
+    const [filterData, setFilterData] = useState([...dummyArr]);
+    const [value, setValue] = React.useState('');
+
+    const handleFilterChange = (wName) => {
+        if (!wName) {
+            setFilterData([...dummyArr]);
+            return;
+        }
+        let tData = [...dummyArr];
+        tData = tData.filter(item => item.WarehouseName === wName.label);
+        setFilterData([...tData])
+    }
     return (
         <>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem',alignItems: 'baseline' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', alignItems: 'baseline' }}>
                 <div style={{
                     fontWeight: '400',
                     fontSize: '1.25rem'
@@ -90,7 +81,7 @@ function Home(props) {
                     fontWeight: '500',
                     fontSize: '0.75rem', color: '#042E70'
                 }}>
-                    {new Date().getDate() + "/" + (new Date().getMonth() + 1) + "/" + new Date().getFullYear()+ ' '}
+                    {new Date().getDate() + "/" + (new Date().getMonth() + 1) + "/" + new Date().getFullYear() + ' '}
                     {new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds()}
                 </div>
             </div>
@@ -124,31 +115,31 @@ function Home(props) {
                 <div style={{ flex: '1', background: '#747ED1', marginLeft: '1.5rem', padding: '1rem', borderRadius: '5%' }}>
                     <div style={{
                         fontWeight: '500',
-                        fontSize: '1rem', color: '#FFFFFF', marginBottom:'0.5rem'
+                        fontSize: '1rem', color: '#FFFFFF', marginBottom: '0.5rem'
                     }}>Total Warehouse</div>
                     <div style={{
                         fontWeight: '600',
-                        fontSize: '2.25rem', color: '#FFFFFF', marginBottom:'0.5rem'
+                        fontSize: '2.25rem', color: '#FFFFFF', marginBottom: '0.5rem'
                     }}>200</div>
                 </div>
                 <div style={{ flex: '1', background: '#747ED1', marginLeft: '1.5rem', padding: '1rem', borderRadius: '5%' }}>
                     <div style={{
                         fontWeight: '500',
-                        fontSize: '1rem', color: '#FFFFFF', marginBottom:'0.5rem'
+                        fontSize: '1rem', color: '#FFFFFF', marginBottom: '0.5rem'
                     }}>Product IN</div>
                     <div style={{
                         fontWeight: '600',
-                        fontSize: '2.25rem', color: '#FFFFFF', marginBottom:'0.5rem'
+                        fontSize: '2.25rem', color: '#FFFFFF', marginBottom: '0.5rem'
                     }}>200</div>
                 </div>
                 <div style={{ flex: '1', background: '#747ED1', marginLeft: '1.5rem', padding: '1rem', borderRadius: '5%' }}>
                     <div style={{
                         fontWeight: '500',
-                        fontSize: '1rem', color: '#FFFFFF', marginBottom:'0.5rem'
+                        fontSize: '1rem', color: '#FFFFFF', marginBottom: '0.5rem'
                     }}>Product OUT</div>
                     <div style={{
                         fontWeight: '600',
-                        fontSize: '2.25rem', color: '#FFFFFF', marginBottom:'0.5rem'
+                        fontSize: '2.25rem', color: '#FFFFFF', marginBottom: '0.5rem'
                     }}>200</div>
                 </div>
             </div>
@@ -156,20 +147,22 @@ function Home(props) {
                 <div style={{ display: 'flex', alignItems: 'center' }}> <Autocomplete
                     disablePortal
                     id="combo-box-demo"
-                    options={dummyArr && dummyArr.map((value, index) => {
+                    options={filterData && filterData.map((value, index) => {
                         return { label: value.WarehouseName }
                     })}
+                    value={value}
                     onChange={(event, newValue) => {
+                        handleFilterChange(newValue);
                         setValue(newValue);
-                      }}
+                    }}
                     sx={{ width: 400, }}
-                    renderInput={(params) => <TextField {...params} label="Search User" onChange={} />}
-                /> 
-                {/* <SearchRoundedIcon /> */}
+                    renderInput={(params) => <TextField {...params} label="Search User" />}
+                />
+                    {/* <SearchRoundedIcon /> */}
                 </div>
                 <div>
                     <Stack spacing={2}>
-                        <Pagination count={dummyArr.length/2} size="small" color="primary" />
+                        <Pagination count={dummyArr.length / 2} size="small" color="primary" />
                     </Stack>
                 </div>
             </div>
@@ -194,7 +187,7 @@ function Home(props) {
                     <div style={{ flex: '1' }}>Action</div>
 
                 </div>
-                <div>{dummyArr && dummyArr.map((value, index) => {
+                <div>{filterData && filterData.map((value, index) => {
                     return (
                         <div style={{
                             display: 'flex',

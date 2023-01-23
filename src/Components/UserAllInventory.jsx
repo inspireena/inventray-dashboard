@@ -11,7 +11,6 @@ import { useState } from 'react';
 
 
 function UserAllInventory(props) {
-    const[searchText, setSearchText] = useState()
     const warehouseNames = [
         { label: 'Avinashi Traders', year: 1994 },
         { label: 'Abhishek Gupta', year: 1972 },];
@@ -57,10 +56,23 @@ function UserAllInventory(props) {
             Action: 'See details'
         }
     ]
-    console.log('search==', searchText);
+
+    const [filterData, setFilterData] = useState([...dummyArr]);
+    const [value, setValue] = React.useState('');
+
+    const handleFilterChange = (wName) => {
+        if (!wName) {
+            setFilterData([...dummyArr]);
+            return;
+        }
+        let tData = [...dummyArr];
+        tData = tData.filter(item => item.WarehouseName === wName.label);
+        setFilterData([...tData])
+    }
+
     return (
         <>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem',alignItems: 'baseline' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', alignItems: 'baseline' }}>
                 <div style={{
                     fontWeight: '400',
                     fontSize: '1.25rem'
@@ -69,7 +81,7 @@ function UserAllInventory(props) {
                     fontWeight: '500',
                     fontSize: '0.75rem', color: '#042E70'
                 }}>
-                    {new Date().getDate() + "/" + (new Date().getMonth() + 1) + "/" + new Date().getFullYear()+ ' '}
+                    {new Date().getDate() + "/" + (new Date().getMonth() + 1) + "/" + new Date().getFullYear() + ' '}
                     {new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds()}
                 </div>
             </div>
@@ -135,17 +147,22 @@ function UserAllInventory(props) {
                 <div style={{ display: 'flex', alignItems: 'center' }}> <Autocomplete
                     disablePortal
                     id="combo-box-demo"
+                    value={value}
+                    onChange={(event, newValue) => {
+                        handleFilterChange(newValue);
+                        setValue(newValue);
+                    }}
                     options={dummyArr && dummyArr.map((value, index) => {
                         return { label: value.WarehouseName }
                     })}
                     sx={{ width: 400, }}
-                    renderInput={(params) => <TextField {...params} label="Search User" onChange={()=>setSearchText(params)} />}
-                /> 
-                {/* <SearchRoundedIcon /> */}
+                    renderInput={(params) => <TextField {...params} label="Search User" />}
+                />
+                    {/* <SearchRoundedIcon /> */}
                 </div>
                 <div>
                     <Stack spacing={2}>
-                        <Pagination count={dummyArr.length/2} size="small" color="primary" />
+                        <Pagination count={dummyArr.length / 2} size="small" color="primary" />
                     </Stack>
                 </div>
             </div>
@@ -170,7 +187,7 @@ function UserAllInventory(props) {
                     {/* <div style={{ flex: '1' }}>Action</div> */}
 
                 </div>
-                <div>{dummyArr && dummyArr.map((value, index) => {
+                <div>{filterData && filterData.map((value, index) => {
                     return (
                         <div style={{
                             display: 'flex',

@@ -7,11 +7,22 @@ import Select from '@mui/material/Select';
 import TextField from '@mui/material/TextField';
 import KeyboardBackspaceRoundedIcon from '@mui/icons-material/KeyboardBackspaceRounded';
 import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
-function UserWarehouse(props) {
-    const [age, setAge] = React.useState('');
 
-    const handleChange = (event) => {
-        setAge(event.target.value);
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Typography from '@mui/material/Typography';
+import TabWareHouseUser from './TabWareHouseUser';
+import TabSKUUser from './TabSKUUser';
+import AddWareHouse from './AddWareHouse';
+import AddSKU from './AddSKU';
+
+function UserWarehouse(props) {
+
+    const [isActiveAddTab, setIsActiveAddTab] = React.useState(null);
+    const [value, setValue] = React.useState(0);
+
+    const handleTabChange = (event, newValue) => {
+        setValue(newValue);
     };
 
 
@@ -30,79 +41,31 @@ function UserWarehouse(props) {
                     {new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds()}
                 </div>
             </div>
-            <div style={{ display: 'flex', marginTop: '0.5rem', marginBottom: '1.5rem' }}>
-                <div><KeyboardBackspaceRoundedIcon /></div>
-                <div style={{
-                    fontWeight: '400',
-                    fontSize: '0.8rem',
-                    color: '#042E70'
-                }}>SKU/Warehouse</div>
-                <div style={{
-                    fontWeight: '400',
-                    fontSize: '0.8rem',
-                    color: '#333333',
-                    display: 'flex'
-                }}> <div><ChevronRightRoundedIcon /> </div>
-                    <div>Add Warehouse</div> </div>
-            </div>
-            <div style={{ display: 'flex' }}>
-                <div style={{ flex: '1', marginRight: '0.75rem' }}>
-                    <Box
-                        component="form"
-                        sx={{
-                            '& > :not(style)': { m: 1, width: '100%' },
-                        }}
-                        noValidate
-                        autoComplete="off"
-                    >
-                        <TextField id="outlined-basic" label="Warehouse" variant="outlined" />
-                    </Box>
-                </div>
-                <div style={{ flex: '1', marginLeft: '0.75rem' }}>
-                    <Box
-                        component="form"
-                        sx={{
-                            '& > :not(style)': { m: 1, width: '100%' },
-                        }}
-                        noValidate
-                        autoComplete="off"
-                    >
-                        <TextField id="outlined-basic" label="Farmer Name" variant="outlined" />
-                    </Box>
-                </div>
-            </div>
-            <div style={{ display: 'flex' }}>
-                <div style={{ flex: '1', marginRight: '0.75rem' }}>
-                    <Box
-                        component="form"
-                        sx={{
-                            '& > :not(style)': { m: 1, width: '100%' },
-                        }}
-                        noValidate
-                        autoComplete="off"
-                    >
-                        <TextField id="outlined-basic" label="Warehouse" variant="outlined" />
-                    </Box>
-                </div>
-                <div style={{ flex: '1', marginLeft: '0.75rem' }}>
-                    <Box
-                        component="form"
-                        sx={{
-                            '& > :not(style)': { m: 1, width: '100%' },
-                        }}
-                        noValidate
-                        autoComplete="off"
-                    >
-                        <TextField id="outlined-basic" label="Farmer Name" variant="outlined" />
-                    </Box>
-                </div>
-            </div>
-            
-           
-            <div> <button style={{
-                background: '#042E70',
-                borderRadius: '2%', color: '#ffffff', padding: '0.5rem 1.5rem', marginTop: '1rem', border: 'solid 0.1rem #042E70',
-            }} > Add warehouse</button></div>
+            {!isActiveAddTab &&
+                <>
+                    <div style={{ display: 'flex', marginTop: '0.5rem', marginBottom: '1.5rem' }}>
+                        <Tabs value={value} onChange={handleTabChange} aria-label="basic tabs example">
+                            <Tab label="WAREHOUSE" />
+                            <Tab label="SKU" />
+                        </Tabs>
+                    </div>
+
+                    <div style={{ display: 'flex', marginTop: '0.5rem', marginBottom: '1.5rem' }}>
+                        {value === 0 && <TabWareHouseUser setIsActiveAddTab={setIsActiveAddTab} />}
+                        {value === 1 && <TabSKUUser setIsActiveAddTab={setIsActiveAddTab} />}
+                    </div>
+                </>
+            }
+
+            {isActiveAddTab &&
+                <>
+                    <div style={{ display: 'flex', marginTop: '0.5rem', marginBottom: '1.5rem' }}>
+                        {isActiveAddTab === 'warehouse' && <AddWareHouse setIsActiveAddTab={setIsActiveAddTab} />}
+                        {isActiveAddTab === 'sku' && <AddSKU setIsActiveAddTab={setIsActiveAddTab} />}
+                    </div>
+                </>
+            }
+
         </>
     )
 }
