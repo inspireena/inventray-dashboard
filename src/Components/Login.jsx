@@ -4,7 +4,6 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import ApiInstance from './ApiInstance';
 
 function Login() {

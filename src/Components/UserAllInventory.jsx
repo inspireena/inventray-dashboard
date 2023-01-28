@@ -5,6 +5,7 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import { useState } from 'react';
 import ApiInstance from './ApiInstance';
+import usePagination from './Pagination';
 
 
 function UserAllInventory(props) {
@@ -12,6 +13,9 @@ function UserAllInventory(props) {
     const [filterData, setFilterData] = useState([]);
     const [initialData, setInitialData] = useState([]);
     const [value, setValue] = React.useState('');
+    const [page, setPage] = React.useState(1);
+    const noOfPageItems = 2;
+    const paginationData = usePagination([...filterData], noOfPageItems);
     const { token, email } = JSON.parse(localStorage.getItem('loggedin'));
     React.useEffect(() => {
         ApiInstance.post('/api/v1/sku/get', { token: token })
@@ -33,16 +37,13 @@ function UserAllInventory(props) {
         tData = tData.filter(item => item.name === wName.label);
         setFilterData([...tData])
     }
-    const [page, setPage] = React.useState(1);
-    const noOfPageItems = 2;
+
     const handleChange = (event, value) => {
-        const tempData =[...initialData];
-        const startingIndex = (value-1)*noOfPageItems;
-        const endIndex = Math.min(startingIndex + noOfPageItems-1,tempData.length-1)
-        tempData = tempData.slice(startingIndex, endIndex+1)
+        paginationData.jump(value);
         setPage(value);
-        setFilterData([...tempData])
     };
+
+    console.log('paginationData===', paginationData, paginationData.currentData());
     return (
         <>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', alignItems: 'baseline' }}>
@@ -106,7 +107,7 @@ function UserAllInventory(props) {
                     <div style={{ flex: '1' }}>Weight Out </div>
 
                 </div>
-                <div>{filterData && filterData.map((value, index) => {
+                <div>{paginationData && paginationData.currentData() && paginationData.currentData().length > 0 && paginationData.currentData().map((value, index) => {
                     return (
                         <div style={{
                             display: 'flex',

@@ -5,11 +5,15 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import ApiInstance from './ApiInstance';
 import { useState } from 'react';
+import usePagination from './Pagination';
 
 function TabSKUUser(props) {
     const [filterData, setFilterData] = useState([]);
     const [initialData, setInitialData] = useState([]);
     const [value, setValue] = React.useState('');
+    const [page, setPage] = React.useState(1);
+    const noOfPageItems = 2;
+    const paginationData = usePagination([...filterData], noOfPageItems);
     const { token, email } = JSON.parse(localStorage.getItem('loggedin'));
     React.useEffect(() => {
         ApiInstance.post('/api/v1/sku/get', { token: token })
@@ -30,7 +34,12 @@ function TabSKUUser(props) {
         tData = tData.filter(item => item.name === wName.label);
         setFilterData([...tData])
     }
-   
+
+    const handleChange = (event, value) => {
+        paginationData.jump(value);
+        setPage(value);
+    };
+
     return (
         <>
             <div style={{ width: '100%' }}>
@@ -67,7 +76,7 @@ function TabSKUUser(props) {
 
                     <div>
                         <Stack spacing={2}>
-                            <Pagination count={filterData.length / 6} size="small" color="primary" />
+                            <Pagination count={initialData.length / noOfPageItems} size="small" color="primary" page={page} onChange={handleChange} />
                         </Stack>
                     </div>
                 </div>
@@ -87,7 +96,7 @@ function TabSKUUser(props) {
                     <div style={{ flex: '1.2' }}>Weigth In</div>
                     {/* <div style={{ flex: '1' }}>Action</div> */}
                 </div>
-                <div>{filterData && filterData.map((value, index) => {
+                <div>{paginationData && paginationData.currentData() && paginationData.currentData().length > 0 && paginationData.currentData().map((value, index) => {
                     return (
                         <div style={{
                             display: 'flex',
@@ -99,7 +108,7 @@ function TabSKUUser(props) {
                             fontSize: ' 0.8rem',
                             color: '#8E8E8E',
                         }}>
-                            <div style={{ flex: '0.5' }}>{index+1}</div>
+                            <div style={{ flex: '0.5' }}>{index + 1}</div>
 
                             {/* <div style={{
                                 flex: '1.2', fontWeight: 300,
