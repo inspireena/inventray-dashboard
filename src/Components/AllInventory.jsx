@@ -85,79 +85,23 @@ function AllInventory(props) {
                     {new Date().getHours() + ":" + new Date().getMinutes() + ":" + new Date().getSeconds()}
                 </div>
             </div>
-            {/* <div style={{ display: 'flex' }}>
-                <div style={{
-                    display: 'flex', flex: '2.5', background: '#F9F9F9', borderRadius: '5%', padding: '1.25rem',
-                    justifyContent: 'space-between'
-                }}>
-                    <div style={{ width: '5rem', height: '5rem', borderRadius: '50%', border: '1px solid #074CBB', backgroundColor: 'black' }}></div>
-                    <div>
-                        <div style={{ marginBottom: '0.5rem' }}>
-                            <div style={{
-                                fontweight: '400',
-                                fontSize: '1.25rem',
-                                color: '#000000',
-                            }}>Welcome Admin</div>
-                            <div style={{
-                                fontweight: '400',
-                                fontSize: '0.85rem',
-                                color: '#757575',
-                            }}>Shubhamrethore@gmail.com</div>
-                        </div>
-                        <div style={{
-                            fontweight: '400',
-                            fontSize: '0.85rem',
-                            color: '#042E70',
-                        }}>Manage All, your user details.</div>
-                    </div>
-                    <div><BorderColorRoundedIcon /></div>
-                </div>
-                <div style={{ flex: '1', background: '#747ED1', marginLeft: '1.5rem', padding: '1rem', borderRadius: '5%' }}>
-                    <div style={{
-                        fontWeight: '500',
-                        fontSize: '1rem', color: '#FFFFFF', marginBottom:'0.5rem'
-                    }}>Total Warehouse</div>
-                    <div style={{
-                        fontWeight: '600',
-                        fontSize: '2.25rem', color: '#FFFFFF', marginBottom:'0.5rem'
-                    }}>200</div>
-                </div>
-                <div style={{ flex: '1', background: '#747ED1', marginLeft: '1.5rem', padding: '1rem', borderRadius: '5%' }}>
-                    <div style={{
-                        fontWeight: '500',
-                        fontSize: '1rem', color: '#FFFFFF', marginBottom:'0.5rem'
-                    }}>Product IN</div>
-                    <div style={{
-                        fontWeight: '600',
-                        fontSize: '2.25rem', color: '#FFFFFF', marginBottom:'0.5rem'
-                    }}>200</div>
-                </div>
-                <div style={{ flex: '1', background: '#747ED1', marginLeft: '1.5rem', padding: '1rem', borderRadius: '5%' }}>
-                    <div style={{
-                        fontWeight: '500',
-                        fontSize: '1rem', color: '#FFFFFF', marginBottom:'0.5rem'
-                    }}>Product OUT</div>
-                    <div style={{
-                        fontWeight: '600',
-                        fontSize: '2.25rem', color: '#FFFFFF', marginBottom:'0.5rem'
-                    }}>200</div>
-                </div>
-            </div> */}
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem', alignItems: 'center' }}>
                 <div style={{ display: 'flex', alignItems: 'center' }}> <Autocomplete
-                    disablePortal
-                    id="combo-box-demo"
-                    value={value}
-                    onChange={(event, newValue) => {
-                        handleFilterChange(newValue);
-                        setValue(newValue);
-                    }}
-                    options={dummyArr && dummyArr.map((value, index) => {
-                        return { label: value.WarehouseName }
-                    })}
-                    sx={{ width: 400, }}
-                    renderInput={(params) => <TextField {...params} label="Search User" />}
-                />
+                        size='small'
+                        disablePortal
+                        id="combo-box-demo"
+
+                        options={filterData && filterData.map((value, index) => {
+                            return { label: value.WarehouseName }
+                        })}
+                        value={value}
+                        onChange={(event, newValue) => {
+                            handleFilterChange(newValue);
+                            setValue(newValue);
+                        }}
+                        sx={{ width: 400, }}
+                        renderInput={(params) => <TextField {...params} label="Search User" />}
+                    />
                     {/* <SearchRoundedIcon /> */}
                 </div>
                 <div>

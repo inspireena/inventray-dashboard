@@ -1,58 +1,36 @@
 import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
-import DeleteIcon from '@mui/icons-material/Delete';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded';
-import { height } from '@mui/system';
+import ApiInstance from './ApiInstance';
 import { useState } from 'react';
 
 function TabSKUUser(props) {
-    const [searchText, setSearchText] = useState()
-    const dummyArr = [
-        // {
-        //     SNo: 'S.no',
-        //     dateTime: 'Date & Time',
-        //     WarehouseName: 'Warehouse Name',
-        //     SKU: 'SKU',
-        //     BoxesAvailable: 'Boxes Available',
-        //     BoxesIN: 'Boxes IN',
-        //     BoxesOUT: 'Boxes OUT',
-        //     Action: 'Action',
-        // },
-        {
-            SNo: '01',
-            WarehouseName: 'Avinashi Traders',
-            Location: 'Indore, M.P.',
-            email: 'avinashverma455@gmail.com',
-            Mobile: '+91 85569522365',
-            userName: 'avinashverma455@gmail.com',
-            Password: 'Avi@987',
-            Action: 'See details'
-        },
-        {
-            SNo: '02',
-            WarehouseName: 'radhika Traders',
-            Location: 'Indore, M.P.',
-            email: 'avinashverma455@gmail.com',
-            Mobile: '+91 85569522365',
-            userName: 'avinashverma455@gmail.com',
-            Password: 'Avi@987',
-            Action: 'See details'
-        },
-        {
-            SNo: '03',
-            WarehouseName: 'Avii Traders',
-            Location: 'Indore, M.P.',
-            email: 'avinashverma455@gmail.com',
-            Mobile: '+91 85569522365',
-            userName: 'avinashverma455@gmail.com',
-            Password: 'Avi@987',
-            Action: 'See details'
+    const [filterData, setFilterData] = useState([]);
+    const [initialData, setInitialData] = useState([]);
+    const [value, setValue] = React.useState('');
+    const { token, email } = JSON.parse(localStorage.getItem('loggedin'));
+    React.useEffect(() => {
+        ApiInstance.post('/api/v1/sku/get', { token: token })
+            .then((response) => {
+                console.log('userWarehouse', response.data.data.getAllSKu);
+                setInitialData(response.data.data.getAllSKu);
+                setFilterData(response.data.data.getAllSKu);
+
+            })
+
+    }, [])
+    const handleFilterChange = (wName) => {
+        if (!wName) {
+            setFilterData([...initialData]);
+            return;
         }
-    ]
+        let tData = [...initialData];
+        tData = tData.filter(item => item.name === wName.label);
+        setFilterData([...tData])
+    }
+   
     return (
         <>
             <div style={{ width: '100%' }}>
@@ -63,28 +41,33 @@ function TabSKUUser(props) {
                         disablePortal
                         id="combo-box-demo"
 
-                        options={dummyArr && dummyArr.map((value, index) => {
-                            return { label: value.WarehouseName }
+                        options={filterData && filterData.map((value, index) => {
+                            return { label: value.name }
                         })}
+                        value={value}
+                        onChange={(event, newValue) => {
+                            handleFilterChange(newValue);
+                            setValue(newValue);
+                        }}
                         sx={{ width: 400, }}
                         renderInput={(params) => <TextField {...params} label="Search SKU" />}
                     />
                         {/* <SearchRoundedIcon /> */}
                         <div>
-                            <button
+                            {/* <button
                                 onClick={() => {
                                     props.setIsActiveAddTab('sku')
                                 }}
                                 style={{
                                     background: '#042E70',
                                     borderRadius: '2%', color: 'white', padding: '0.5rem 1.5rem', marginLeft: '25px'
-                                }}> +Add SKU</button>
+                                }}> +Add SKU</button> */}
                         </div>
                     </div>
 
                     <div>
                         <Stack spacing={2}>
-                            <Pagination count={dummyArr.length / 2} size="small" color="primary" />
+                            <Pagination count={filterData.length / 6} size="small" color="primary" />
                         </Stack>
                     </div>
                 </div>
@@ -99,11 +82,12 @@ function TabSKUUser(props) {
                     color: '#8E8E8E',
                 }}>
                     <div style={{ flex: '0.5' }}>S.no</div>
-                    <div style={{ flex: '1.2' }}>SKU Image</div>
+                    {/* <div style={{ flex: '1.2' }}>SKU Image</div> */}
                     <div style={{ flex: '1.2' }}>SKU Name</div>
-                    <div style={{ flex: '1' }}>Action</div>
+                    <div style={{ flex: '1.2' }}>Weigth In</div>
+                    {/* <div style={{ flex: '1' }}>Action</div> */}
                 </div>
-                <div>{dummyArr && dummyArr.map((value, index) => {
+                <div>{filterData && filterData.map((value, index) => {
                     return (
                         <div style={{
                             display: 'flex',
@@ -115,22 +99,29 @@ function TabSKUUser(props) {
                             fontSize: ' 0.8rem',
                             color: '#8E8E8E',
                         }}>
-                            <div style={{ flex: '0.5' }}>{value.SNo}</div>
+                            <div style={{ flex: '0.5' }}>{index+1}</div>
 
-                            <div style={{
+                            {/* <div style={{
                                 flex: '1.2', fontWeight: 300,
                                 fontSize: '15px',
                                 lineHeight: '22px',
                                 color: '#333333'
-                            }}>{value.Location}</div>
+                            }}> SKU iMAGE</div> */}
                             <div style={{
                                 flex: '1.2', fontWeight: '300',
                                 fontSize: '1rem',
                                 color: '#333333'
                             }}>
-                                {value.WarehouseName}
+                                {value.name}
                             </div>
                             <div style={{
+                                flex: '1.2', fontWeight: '300',
+                                fontSize: '1rem',
+                                color: '#333333'
+                            }}>
+                                {value.weightIn}
+                            </div>
+                            {/* <div style={{
                                 flex: '1', fontWeight: '300',
                                 fontSize: '1rem',
                                 color: '#042E70',
@@ -138,7 +129,7 @@ function TabSKUUser(props) {
                                 alignSelf: 'center',
                             }}><BorderColorRoundedIcon style={{ marginRight: '0.5rem', color: '#333333' }} />
                                 <DeleteIcon style={{ color: '#D9534F' }} />
-                            </div>
+                            </div> */}
                         </div>
                     )
                 })}</div>

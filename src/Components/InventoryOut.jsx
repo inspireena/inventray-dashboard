@@ -4,104 +4,177 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import TextField from '@mui/material/TextField';
-import KeyboardBackspaceRoundedIcon from '@mui/icons-material/KeyboardBackspaceRounded';
-import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
+import Stack from '@mui/material/Stack';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+
 function InventoryOut(props) {
-    const [age, setAge] = React.useState('');
+    const [SKU, setSKU] = React.useState('');
+    const [wHouse, setWHouse] = React.useState('');
+    const [farmer, setFarmer] = React.useState('');
+    const dummyArr = [
+        // {
+        //     SNo: 'S.no',
+        //     dateTime: 'Date & Time',
+        //     WarehouseName: 'Warehouse Name',
+        //     SKU: 'SKU',
+        //     BoxesAvailable: 'Boxes Available',
+        //     BoxesIN: 'Boxes IN',
+        //     BoxesOUT: 'Boxes OUT',
+        //     Action: 'Action',
+        // },
+        {
+            SNo: '01',
+            dateTime: '21 Jan,2022 02:30pm',
+            WarehouseName: 'Avinashi Traders',
+            SKU: 'Orenge, Man..',
+            BoxesAvailable: '200',
+            BoxesIN: '200',
+            BoxesOUT: '150',
+            Action: 'See details'
+        },
+        {
+            SNo: '02',
+            dateTime: '21 Jan,2022 02:30pm',
+            WarehouseName: 'Abhishek Gupta',
+            SKU: 'Orange, Man..',
+            BoxesAvailable: '200',
+            BoxesIN: '200',
+            BoxesOUT: '150',
+            Farmer: 'See details'
+        },
+        {
+            SNo: '03',
+            dateTime: '21 Jan,2022 02:30pm',
+            WarehouseName: 'abhay Gupta',
+            SKU: 'Orange, Man..',
+            BoxesAvailable: '200',
+            BoxesIN: '200',
+            BoxesOUT: '150',
+            Farmer: 'See details'
+        }, {
+            SNo: '04',
+            dateTime: '21 Jan,2022 02:30pm',
+            WarehouseName: 'Avinashi Traders',
+            SKU: 'Mango',
+            BoxesAvailable: '200',
+            BoxesIN: '200',
+            BoxesOUT: '150',
+            Farmer: 'See details'
+        }
+    ]
+
+    const [filterData, setFilterData] = React.useState([...new Set(dummyArr)]);
 
     const handleChange = (event) => {
-        setAge(event.target.value);
+        setSKU(event.target.value);
+    };
+    const handleWarehouse = (event) => {
+        setWHouse(event.target.value);
+    };
+    const handleFarmer = (event) => {
+        setFarmer(event.target.value);
     };
 
+    const handleClick = (event) => {
+        event.preventDefault();
+        props.setInventory('')
+     
+    }
 
+    const breadcrumbs = [
+        <Link underline="hover" key="1" color=" #042E70" href="/" onClick={handleClick}>
+            Home
+        </Link>,
+        <Typography key="2" color="B1B1B1">
+            Inventory Out
+        </Typography>,
+    ];
     return (
         <>
-            <div style={{ display: 'flex', marginTop: '0.5rem', marginBottom: '1.5rem' }}>
-                <div><KeyboardBackspaceRoundedIcon /></div>
-                <div style={{
-                    fontWeight: '400',
-                    fontSize: '0.8rem',
-                    color: '#042E70'
-                }}>Home</div>
-                <div style={{
-                    fontWeight: '400',
-                    fontSize: '0.8rem',
-                    color: '#333333',
-                    display: 'flex'
-                }}> <div><ChevronRightRoundedIcon /> </div>
-                    <div>Inventory Out</div> </div>
+            <div style={{margin:'1.25rem 0rem'}} >
+                <Stack spacing={2}>
+                    <Breadcrumbs separator="›" aria-label="breadcrumb">
+                        {breadcrumbs}
+                    </Breadcrumbs>
+                </Stack>
             </div>
-            <div style={{ display: 'flex' }}>
-                <div style={{ flex: '1', marginRight:'0.75rem' }}>
-                    <Box sx={{  }}>
+            <div style={{ display: 'flex', marginBottom: '1rem' }}>
+                <div style={{ flex: '1', marginRight: '0.75rem' }}>
+                    <Box sx={{}}>
                         <FormControl fullWidth>
                             <InputLabel id="demo-simple-select-label">Select SKU</InputLabel>
                             <Select
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
-                                value={age}
+                                value={SKU}
                                 label="Select SKU"
                                 onChange={handleChange}
                             >
-                                <MenuItem value={10}>Ten</MenuItem>
-                                <MenuItem value={20}>Twenty</MenuItem>
-                                <MenuItem value={30}>Thirty</MenuItem>
+                                {filterData.map((value, index) => { return (<MenuItem value={value.SKU}> {value.SKU}</MenuItem>) })}
+
+                                {/* <MenuItem value={20}>Twenty</MenuItem>
+                                <MenuItem value={30}>Thirty</MenuItem> */}
                             </Select>
                         </FormControl>
                     </Box>
                 </div>
-                <div style={{ flex: '1', marginLeft:'0.75rem' }}>
-                    <button style={{
-                        fontWeight: '500',
-                        fontSize: ' 0.6rem', padding: '0.5rem 1.5rem', border:'solid 0.1rem #042E70', backgroundColor:'white'
-                    }}>+Add User </button>
+                <div style={{ flex: '1' }}>
+                    <Box sx={{}}>
+                        <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-label">Select Warehouse</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={wHouse}
+                                label="Select Warehouse"
+                                onChange={handleWarehouse}
+                            >
+                                {filterData.map((value, index) => { return (<MenuItem value={value.WarehouseName}> {value.WarehouseName}</MenuItem>) })}
+                            </Select>
+                        </FormControl>
+                    </Box>
                 </div>
+
             </div>
             <div style={{ display: 'flex' }}>
-                <div style={{ flex: '1', marginRight:'0.75rem' }}>
-                    <Box
-                        component="form"
-                        sx={{
-                            '& > :not(style)': { m: 1,  width: '100%' },
-                        }}
-                        noValidate
-                        autoComplete="off"
-                    >
-                        <TextField id="outlined-basic" label="Warehouse" variant="outlined" />
+                <div style={{ flex: '1', marginRight: '0.75rem' }}>
+                    <Box sx={{}}>
+                        <FormControl fullWidth>
+                            <InputLabel id="demo-simple-select-label">Select Farmer</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={farmer}
+                                label="Select Farmer"
+                                onChange={handleFarmer}
+                            >
+                                {filterData.map((value, index) => { return ([...new Set() ]) })}
+
+                            </Select>
+                        </FormControl>
                     </Box>
                 </div>
-                <div style={{ flex: '1', marginLeft:'0.75rem' }}>
-                    <Box
-                        component="form"
-                        sx={{
-                            '& > :not(style)': { m: 1, width: '100%' },
+                <div style={{ flex: '1' }}>
+                    {/* <Autocomplete
+                        apiKey={}
+                        onPlaceSelected={(place) => {
+                            console.log(place);
                         }}
-                        noValidate
-                        autoComplete="off"
-                    >
-                        <TextField id="outlined-basic" label="Farmer Name" variant="outlined" />
-                    </Box>
+                    />; */}
                 </div>
             </div>
-            <div>
-                <Box
-                    component="form"
-                    sx={{
-                        '& > :not(style)': { m: 1, width: '49%' },
-                    }}
-                    noValidate
-                    autoComplete="off"
-                >
-                    <TextField id="outlined-basic" label="Location" variant="outlined" />
-                </Box>
-            </div>
-            <div style={{marginTop :'1.5rem', fontWeight: '500',
-fontSize: '1rem', color :'#042E70'}}>+ Attached QR Code</div>
-<div> <button style={{
-                        background: '#042E70' ,
-                        borderRadius: '2%', color:'#ffffff' , padding: '0.5rem 1.5rem', marginTop: '4rem', border: 'solid 0.1rem #042E70', 
-                    }} > Upadate Inventory</button></div>
+
+            <div style={{
+                marginTop: '1.5rem', fontWeight: '500',
+                fontSize: '1rem', color: '#042E70'
+            }}>+ Attached QR Code</div>
+            <div> <button style={{
+                background: '#042E70',
+                borderRadius: '2%', color: '#ffffff', padding: '0.5rem 1.5rem', marginTop: '4rem', border: 'solid 0.1rem #042E70',
+            }} > Upadate Inventory</button></div>
         </>
     )
 }

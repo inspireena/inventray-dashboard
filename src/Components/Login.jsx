@@ -4,30 +4,38 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import ApiInstance from './ApiInstance';
 
 function Login() {
     const [email, setEmail] = useState()
     const [password, setPassword] = useState()
     const navigate = useNavigate()
 
-    // if (localStorage.getItem('loggedin')) {
-    //     window.location.replace('/dashboard')
-    //     return null;
-    // }
+    if (localStorage.getItem('loggedin')) {
+        window.location.replace('/dashboard')
+        return null;
+    }
 
 
     const handleLogin = () => {
-        if (email.toLowerCase() === 'admin' && password === 'Admin@123') {
-            localStorage.setItem('loggedin', JSON.stringify({ email, password }))
-            navigate('/dashboard')
-        }
-        else if(email.toLowerCase() === 'user' && password === 'User@123') {
-            localStorage.setItem('loggedin', JSON.stringify({ email, password }))
-            navigate('/dashboard')
-        }
-        else{
-            alert('wrong details')
-        }
+        ApiInstance.post('/api/v1/auth/login', {
+            "userEmailOrContact":email,
+            "password":password        } )
+            .then((response)=>{
+                
+                 if(response.data.data.success && response.data.data.jwt  ) {
+                    localStorage.setItem('loggedin', JSON.stringify({ 'token' : response.data.data.jwt, email : 'user'}))
+                    navigate('/dashboard')
+                }
+                else{
+                    alert('wrong details')
+                }
+
+                console.log('login api===', response);
+            })
+       
+       
 
     }
     return (

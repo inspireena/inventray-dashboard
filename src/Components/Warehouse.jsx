@@ -53,6 +53,18 @@ function Warehouse(props) {
             Action: 'See details'
         }
     ]
+    const [filterData, setFilterData] = useState([...dummyArr]);
+    const [value, setValue] = React.useState('');
+
+    const handleFilterChange = (wName) => {
+        if (!wName) {
+            setFilterData([...dummyArr]);
+            return;
+        }
+        let tData = [...dummyArr];
+        tData = tData.filter(item => item.WarehouseName === wName.label);
+        setFilterData([...tData])
+    }
     return (
         <>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', alignItems: 'baseline' }}>
@@ -69,21 +81,27 @@ function Warehouse(props) {
                 </div>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem', alignItems: 'center' }}>
-                <div style={{ display: 'flex', alignItems: 'center' }}> <Autocomplete
-                    disablePortal
-                    id="combo-box-demo"
-                    
-                    options={dummyArr && dummyArr.map((value, index) => {
-                        return { label: value.WarehouseName }
-                    })}
-                    sx={{ width: 400, }}
-                    renderInput={(params) => <TextField {...params} label="Search User"  />}
-                />
+                <div style={{ display: 'flex', alignItems: 'center' }}><Autocomplete
+                        size='small'
+                        disablePortal
+                        id="combo-box-demo"
+
+                        options={filterData && filterData.map((value, index) => {
+                            return { label: value.WarehouseName }
+                        })}
+                        value={value}
+                        onChange={(event, newValue) => {
+                            handleFilterChange(newValue);
+                            setValue(newValue);
+                        }}
+                        sx={{ width: 400, }}
+                        renderInput={(params) => <TextField {...params} label="Search User" />}
+                    />
                     {/* <SearchRoundedIcon /> */}
                     <div>
                         <button style={{
                             background: '#042E70',
-                            borderRadius: '2%', color: 'white', padding: '0.5rem 1.5rem',
+                            borderRadius: '2%', color: 'white', padding: '0.5rem 1.5rem',marginLeft:"1.5rem"
                         }}> +Add User</button>
                     </div>
                 </div>
@@ -111,7 +129,7 @@ function Warehouse(props) {
                 <div style={{ flex: '1.7' }}>Username / Password</div>
                 <div style={{ flex: '1' }}>Action</div>
             </div>
-            <div>{dummyArr && dummyArr.map((value, index) => {
+            <div>{filterData && filterData.map((value, index) => {
                 return (
                     <div style={{
                         display: 'flex',
