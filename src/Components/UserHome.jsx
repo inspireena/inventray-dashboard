@@ -7,67 +7,38 @@ import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded';
-import { height } from '@mui/system';
+import profilePhoto from '../Static/Image/profilePhoto.png'
 import { useState } from 'react';
 import InventoryIn from './InventoryIn';
 import InventoryOut from './InventoryOut';
+import ApiInstance from './ApiInstance';
 function UserHome(props) {
-    const [inventory, setInventory] = useState()
-    // const warehouseNames = [
-    //     { label: 'Avinashi Traders', year: 1994 },
-    //     { label: 'Abhishek Gupta', year: 1972 },];
-    const dummyArr = [
-        // {
-        //     SNo: 'S.no',
-        //     dateTime: 'Date & Time',
-        //     WarehouseName: 'Warehouse Name',
-        //     SKU: 'SKU',
-        //     BoxesAvailable: 'Boxes Available',
-        //     BoxesIN: 'Boxes IN',
-        //     BoxesOUT: 'Boxes OUT',
-        //     Action: 'Action',
-        // },
-        {
-            SNo: '01',
-            dateTime: '21 Jan,2022 02:30pm',
-            WarehouseName: 'Avinashi Traders',
-            SKU: 'Orange, Man..',
-            BoxesAvailable: '200',
-            BoxesIN: '200',
-            BoxesOUT: '150',
-            Action: 'See details'
-        },
-        {
-            SNo: '02',
-            dateTime: '21 Jan,2022 02:30pm',
-            WarehouseName: 'Abhishek Gupta',
-            SKU: 'Orange, Man..',
-            BoxesAvailable: '200',
-            BoxesIN: '200',
-            BoxesOUT: '150',
-            Action: 'See details'
-        },
-        {
-            SNo: '03',
-            dateTime: '21 Jan,2022 02:30pm',
-            WarehouseName: 'abhay Gupta',
-            SKU: 'Orange, Man..',
-            BoxesAvailable: '200',
-            BoxesIN: '200',
-            BoxesOUT: '150',
-            Action: 'See details'
-        }
-    ]
-    const handleInventoryIn=()=>{
-setInventory('in')
+    const [filterData, setFilterData] = useState([]);
+
+    const { token, email } = JSON.parse(localStorage.getItem('loggedin'));
+    React.useEffect(() => {
+        ApiInstance.post('/api/v1/sku/get', { token: token })
+            .then((response) => {
+                console.log('userFARMER', response.data.data.getAllSKu
+                );
+                setFilterData(response.data.data.getAllSKu)
+            })
+
+    }, [])
+
+
+
+    const handleInventoryIn = () => {
+        props.setInventory('in')
     }
-    const handleInventoryOut=()=>{
-        setInventory('out')
-        
+    const handleInventoryOut = () => {
+        props.setInventory('out')
+
     }
 
     return (
-        <>
+        <> 
+        {/* className = flex */}
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', alignItems: 'baseline' }}>
                 <div style={{
                     fontWeight: '400',
@@ -83,10 +54,12 @@ setInventory('in')
             </div>
             <div style={{ display: 'flex' }}>
                 <div style={{
-                    display: 'flex', flex: '2.5', background: '#F9F9F9', borderRadius: '5%', padding: '1.25rem',
+                    display: 'flex', flex: '1.5', background: '#F9F9F9', borderRadius: '5%', padding: '1.25rem',
                     justifyContent: 'space-between'
                 }}>
-                    <div style={{ width: '5rem', height: '5rem', borderRadius: '50%', border: '1px solid #074CBB', backgroundColor: 'black' }}></div>
+                    <div style={{ width: '5rem', height: '5rem', borderRadius: '50%', border: '1px solid #074CBB', backgroundColor: 'black' }}>
+                        <img src={profilePhoto} alt="" style={{ width: '5rem', height: '5rem' }} />
+                    </div>
                     <div>
                         <div style={{ marginBottom: '0.5rem' }}>
                             <div style={{
@@ -106,145 +79,137 @@ setInventory('in')
                             color: '#042E70',
                         }}>Manage All, your user details.</div>
                     </div>
-                    <div><BorderColorRoundedIcon /></div>
+                    <div>
+                        {/* <BorderColorRoundedIcon /> */}
+                    </div>
                 </div>
                 <div style={{ flex: '1', background: '#F9F9F9', marginLeft: '1.5rem', padding: '1rem', borderRadius: '5%' }}>
                     <div style={{
                         fontWeight: '500',
                         fontSize: '1rem', color: '#333333', marginBottom: '0.5rem'
-                    }}>Available Boxes</div>
+                    }}>Boxes In</div>
                     <div style={{
                         fontWeight: '600',
                         fontSize: '2.25rem', color: '#333333', marginBottom: '0.5rem'
-                    }}>200</div>
+                    }}>{
+                            (filterData.map((value, index) => { return value.inStock })).reduce((a, b) => a + b, 0)}</div>
                 </div>
                 <div style={{ flex: '1', background: '#F9F9F9', marginLeft: '1.5rem', padding: '1rem', borderRadius: '5%' }}>
                     <div style={{
                         fontWeight: '500',
                         fontSize: '1rem', color: '#333333', marginBottom: '0.5rem'
-                    }}>Boxes IN</div>
+                    }}>Weight IN</div>
                     <div style={{
                         fontWeight: '600',
                         fontSize: '2.25rem', color: '#333333', marginBottom: '0.5rem'
-                    }}>200</div>
+                    }}>
+                        {
+                            (filterData.map((value, index) => { return value.weightIn })).reduce((a, b) => a + b, 0)}
+                    </div>
                 </div>
-                <div style={{ flex: '1', background: '#F9F9F9', marginLeft: '1.5rem', padding: '1rem', borderRadius: '5%' }}>
-                    <div style={{
-                        fontWeight: '500',
-                        fontSize: '1rem', color: '#333333', marginBottom: '0.5rem'
-                    }}>Boxes OUT</div>
-                    <div style={{
-                        fontWeight: '600',
-                        fontSize: '2.25rem', color: '#333333', marginBottom: '0.5rem'
-                    }}>200</div>
-                </div>
+
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem', alignItems: 'center' }}>
                 <div>
+                    {/* <button style={{
+                        cursor: 'pointer',
+                        background: props.inventory === 'in' ? '#042E70' : 'white',
+                        borderRadius: '2%', color: props.inventory === 'in' ? 'white' : '#042E70', padding: '0.5rem 1.5rem', marginRight: '0.4rem', border: 'solid 0.1rem', borderColor: props.inventory === 'out' ? '#none' : '#042E70'
+                    }} onClick={handleInventoryIn}> inventory In</button>
                     <button style={{
-                        background: inventory === 'in' ? '#042E70' : 'white'  ,
-                        borderRadius: '2%', color: inventory === 'in' ? 'white' : '#042E70' , padding: '0.5rem 1.5rem', marginRight: '0.4rem', border: 'solid 0.1rem', borderColor : inventory === 'out' ? '#none' : '#042E70'
-                    }} onClick={handleInventoryIn}> Inventory In</button>
-                    <button style={{
-                        background: inventory === 'out' ? '#042E70' : 'white',
-                        borderRadius: '2%', color: inventory === 'out' ? 'white' : '#042E70', padding: '0.5rem 1.5rem', border: 'solid 0.1rem', borderColor : inventory === 'out' ? '#none' : '#042E70'
-                    }} onClick={handleInventoryOut}> Inventory Out</button>
+                        cursor: 'pointer',
+                        background: props.inventory === 'out' ? '#042E70' : 'white',
+                        borderRadius: '2%', color: props.inventory === 'out' ? 'white' : '#042E70', padding: '0.5rem 1.5rem', border: 'solid 0.1rem', borderColor: props.inventory === 'out' ? '#none' : '#042E70'
+                    }} onClick={handleInventoryOut}> inventory Out</button> */}
                 </div>
                 <div>
-                    <Stack spacing={2}>
-                        <Pagination count={dummyArr.length / 2} size="small" color="primary" />
-                    </Stack>
+                    {/* <Stack spacing={2}>
+                        <Pagination count={filterData.length / 6} size="small" color="primary" />
+                    </Stack> */}
                 </div>
             </div>
-           <div>
-           { !inventory && <div>
-                <div style={{
-                    display: 'flex',
-                    // justifyContent: ' space-between',
-                    borderBottom: ' 1px solid #EEEEEE',
-                    padding: '0.75rem',
-                    marginTop: ' 0.5rem',
-                    fontWeight: '500',
-                    fontSize: ' 0.8rem',
-                    color: '#8E8E8E',
-                }}>
-                    <div style={{ flex: '0.5' }}>S.no</div>
-                    <div style={{ flex: '1.5' }}>Date & Time</div>
-                    <div style={{ flex: '1.5' }}>Warehouse Name</div>
-                    <div style={{ flex: '1' }}>SKU</div>
-                    <div style={{ flex: '1' }}>Boxes Available</div>
-                    <div style={{ flex: '1' }}>Boxes IN</div>
-                    <div style={{ flex: '1' }}>Boxes OUT</div>
-                    <div style={{ flex: '1' }}>Action</div>
+            <div>
+                {!props.inventory && <div>
+                    <div style={{
+                        display: 'flex',
+                        // justifyContent: ' space-between',
+                        borderBottom: ' 1px solid #EEEEEE',
+                        padding: '0.75rem',
+                        marginTop: ' 0.5rem',
+                        fontWeight: '500',
+                        fontSize: ' 0.8rem',
+                        color: '#8E8E8E',
+                    }}>
+                        <div style={{ flex: '0.5' }}>S.no</div>
+                        <div style={{ flex: '1.5' }}>Date & Time</div>
+                        <div style={{ flex: '1' }}>SKU</div>
+                        <div style={{ flex: '1' }}>Boxes IN</div>
+                        {/* <div style={{ flex: '1' }}>Boxes OUT</div> */}
+                        <div style={{ flex: '1' }}>Weight In </div>
+                        <div style={{ flex: '1' }}>Weight Out </div>
 
-                </div>
-                <div>{dummyArr && dummyArr.map((value, index) => {
-                    return (
-                        <div style={{
-                            display: 'flex',
-                            justifyContent: ' space-between',
-                            borderBottom: ' 1px solid #EEEEEE',
-                            padding: '0.75rem',
-                            marginTop: ' 0.5rem',
-                            fontWeight: '500',
-                            fontSize: ' 0.8rem',
-                            color: '#8E8E8E',
-                        }}>
-                            <div style={{ flex: '0.5' }}>{value.SNo}</div>
-                            <div style={{
-                                flex: '1.5', fontWeight: '300',
-                                fontSize: '1rem',
-                                color: '#333333'
-                            }}>
-                                {value.dateTime}
-                            </div>
-                            <div style={{
-                                flex: '1.5', fontWeight: 300,
-                                fontSize: '15px',
-                                lineHeight: '22px',
-                                color: '#333333'
-                            }}>{value.WarehouseName}</div>
-                            <div style={{
-                                flex: '1', fontWeight: 400,
-                                fontSize: '15px',
-                                lineHeight: '22px',
-                                color: '#333333'
-                            }}>{value.SKU}</div>
-                            <div style={{
-                                flex: '1', fontWeight: '500',
-                                fontSize: '1rem',
-                                color: '#4285F4'
-                            }}>{value.BoxesAvailable}</div>
-                            <div style={{
-                                flex: '1', fontWeight: '500',
-                                fontSize: '1rem',
-                                color: '#36AF8D '
-                            }}>{value.BoxesIN}</div>
-                            <div style={{
-                                flex: '1', fontWeight: '500',
-                                fontSize: '1rem',
-                                color: ' #FF7165',
-                            }}>{value.BoxesOUT}</div>
-                            <div style={{
-                                flex: '1', fontWeight: '300',
-                                fontSize: '1rem',
-                                color: '#042E70',
-                                display: 'flex',
-                                alignSelf: 'center',
-                            }}><VisibilityRoundedIcon style={{ marginRight: '0.5rem' }} />{value.Action}</div>
-                        </div>
-                    )
-                })}</div>
-            </div>}
-            {inventory==='in' && <div>
-                {/* {inventory}==='in' &&  */}
-               <InventoryIn/>
-            </div> }
-            {inventory==='out' && <div>
-                {/* {inventory}==='out' &&  */}
-               <InventoryOut/>
-            </div> }
-           </div>
+
+                    </div>
+                    <div>{filterData && filterData.map((value, index) => {
+                        if (index < 3) {
+                            return (
+                                <div style={{
+                                    display: 'flex',
+                                    justifyContent: ' space-between',
+                                    borderBottom: ' 1px solid #EEEEEE',
+                                    padding: '0.75rem',
+                                    marginTop: ' 0.5rem',
+                                    fontWeight: '500',
+                                    fontSize: ' 0.8rem',
+                                    color: '#8E8E8E',
+                                }}>
+                                    <div style={{ flex: '0.5' }}>{index + 1}</div>
+                                    <div style={{
+                                        flex: '1.5', fontWeight: '300',
+                                        fontSize: '1rem',
+                                        color: '#4285F4'
+                                    }}>
+                                        {value.updatedAt}
+                                    </div>
+                                    <div style={{
+                                        flex: '1', fontWeight: 300,
+                                        fontSize: '1rem',
+                                        color: '#333333'
+                                    }}>{value.name}</div>
+                                    <div style={{
+                                        flex: '1', fontWeight: 500,
+                                        fontSize: '1rem',
+                                        color: '#36AF8D'
+                                    }}>{value.inStock}</div>
+
+                                    {/* <div style={{
+                                    flex: '1', fontWeight: '500',
+                                    fontSize: '1rem',
+                                    color: '#36AF8D '
+                                }}>value.BoxesIN</div> */}
+                                    <div style={{
+                                        flex: '1', fontWeight: '500',
+                                        fontSize: '1rem',
+                                        color: ' #36AF8D',
+                                    }}>{value.weightIn}</div>
+                                    <div style={{
+                                        flex: '1', fontWeight: '500',
+                                        fontSize: '1rem',
+                                        color: ' #FF7165',
+                                    }}>{value.weightOut}</div>
+
+                                </div>
+                            )
+                        }
+                    })}</div>
+                </div>}
+                {props.inventory === 'in' && <div>
+                    <InventoryIn inventory={props.inventory} setInventory={props.setInventory} />
+                </div>}
+                {props.inventory === 'out' && <div>
+                    <InventoryOut inventory={props.inventory} setInventory={props.setInventory} />
+                </div>}
+            </div>
         </>
     )
 }
